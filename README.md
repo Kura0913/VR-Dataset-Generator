@@ -53,4 +53,3 @@ Remove all files in the original, mask, BBox and label folders.
 ### filterbbox.py and filterseg.py
 Because sometimes AirSim does not capture the mask and cannot generate the bounding box, you need to manually filter out the images that failed to generate. You can delete the image that does not generate a bounding box in the BBox, and then execute filterbbox.py to delete the corresponding data in the original, BBox, and label; or after deleting all black images in the mask, execute filterseg.py to delete the corresponding data in the original, BBox, and label.
 
-### intentlabeling.py
