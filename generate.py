@@ -19,9 +19,9 @@ ori_image = airsim.ImageType.Scene
 seg_image = airsim.ImageType.Segmentation
 
 # object list
-object_name_list = ['Tank', 'Human']
+object_name_list = ['cone', 'fence', 'curvemirror', 'jerseybarrier', 'transformerbox']
 # Set the minimum Bounding Box area, which can be used to filter out objects that are too small.
-min_area = 3000
+min_area = 100
 # counter
 mask_color_cnt = 0
 bbox_color_cnt = 0
@@ -59,21 +59,21 @@ def check_image_count(value):
     return nums
 
 def main():
-    parser = argparse.ArgumentParser(description='Description of your script')
-    # define image size
-    parser.add_argument('-i', '--img', nargs='+',  type = int, default = [1920, 1080],  help = 'Image new size')
-    # define minimize area of mask
-    parser.add_argument('-a', '--area', type = int, default = 3000, help = 'minimize area of mask')
-    #define classes
-    parser.add_argument('-c', '--classes', nargs='+', type = str, default = [], help = 'all classes')
-    # define delay time
-    parser.add_argument('-d', '--delay', type = int, default = 1, help = 'delay time')
+    # parser = argparse.ArgumentParser(description='Description of your script')
+    # # define image size
+    # parser.add_argument('-i', '--img', nargs='+',  type = int, default = [1920, 1080],  help = 'Image new size')
+    # # define minimize area of mask
+    # parser.add_argument('-a', '--area', type = int, default = 3000, help = 'minimize area of mask')
+    # #define classes
+    # parser.add_argument('-c', '--classes', nargs='+', type = str, default = [], help = 'all classes')
+    # # define delay time
+    # parser.add_argument('-d', '--delay', type = int, default = 1, help = 'delay time')
 
-    args = parser.parse_args()
-    object_name_list = args.classes
-    min_area = args.area
-    delay_time = args.delay
-    img_target_size = args.img
+    # args = parser.parse_args()
+    # object_name_list = args.classes
+    # min_area = args.area
+    # delay_time = args.delay
+    # img_target_size = args.img
     print('classes list:', object_name_list)
     print('resize:',img_target_size)
     # set all objects' segmentation mask to block
@@ -130,12 +130,22 @@ def main():
             # Initialize the bounding box list of the object
             bounding_boxes = []
             for i in range(objects_num):
+                
                 # convert rgb to hsv
                 hsv_img = cv2.cvtColor(seg_png_ary, cv2.COLOR_BGR2HSV)
                 # resize rgb form
                 resize_color = (np.array([color_dict[mask_color_cnt+1]]).reshape(1,1,3)).astype(np.uint8)                
                 hsv_color_range = cv2.cvtColor(resize_color, cv2.COLOR_RGB2HSV)
                 mask = cv2.inRange(hsv_img, hsv_color_range - np.array([10,10,10]), hsv_color_range + np.array([10,10,10]))
+
+                # # Get target color's infomation
+                # mask_area = np.all(seg_png_ary == np.array(color_dict[mask_color_cnt+1]), axis=-1)
+                # # Set target color to white, others to block
+                # mask = np.zeros_like(seg_png_ary)
+                # mask[mask_area] = [255, 255, 255]
+                # mask[~mask_area] = [0, 0, 0]
+                # mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
+                # get area in the mask
                 
                 contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 mask_color_cnt += 1
