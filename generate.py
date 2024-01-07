@@ -74,8 +74,8 @@ def main():
     min_area = args.area
     delay_time = args.delay
     img_target_size = args.img
-
-    print('resize variable:',img_target_size)
+    print('classes list:', object_name_list)
+    print('resize:',img_target_size)
     # set all objects' segmentation mask to block
     print(client.simSetSegmentationObjectID("[\w]*",0,True))
 
@@ -90,11 +90,12 @@ def main():
         # set objects' mask
         for object_name in object_name_list:
             objects = client.simListSceneObjects(f'{object_name}[\w]*')
+            bbox_color_cnt = 0
             for mesh_name in objects:
                 client.simSetSegmentationObjectID(mesh_name, mask_color_cnt + 1, True)
                 mask_color_cnt += 1
-            # record each object's num
-            bbox_color_cnt = mask_color_cnt - bbox_color_cnt
+                # record each object's num
+                bbox_color_cnt += 1
             # save object's num to list
             objects_cnt_list.append(bbox_color_cnt)
         # print the nums of each object
@@ -119,7 +120,6 @@ def main():
         seg_fname = SAVE_PATH_MASK + datetime_str
         ori_fname = SAVE_PATH_ORIGIN + datetime_str
         # save the original and segamentation image
-        print(f'seg_image:{seg_fname}\nori_image{ori_fname}')
         cv2.imwrite(seg_fname + '.jpg', seg_png_ary)
         cv2.imwrite(ori_fname + '.jpg', ori_png_ary)
         
