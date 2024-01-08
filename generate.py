@@ -59,21 +59,21 @@ def check_image_count(value):
     return nums
 
 def main():
-    # parser = argparse.ArgumentParser(description='Description of your script')
-    # # define image size
-    # parser.add_argument('-i', '--img', nargs='+',  type = int, default = [1920, 1080],  help = 'Image new size')
-    # # define minimize area of mask
-    # parser.add_argument('-a', '--area', type = int, default = 3000, help = 'minimize area of mask')
-    # #define classes
-    # parser.add_argument('-c', '--classes', nargs='+', type = str, default = [], help = 'all classes')
-    # # define delay time
-    # parser.add_argument('-d', '--delay', type = int, default = 1, help = 'delay time')
+    parser = argparse.ArgumentParser(description='Description of your script')
+    # define image size
+    parser.add_argument('-i', '--img', nargs='+',  type = int, default = [1920, 1080],  help = 'Image new size')
+    # define minimize area of mask
+    parser.add_argument('-a', '--area', type = int, default = 3000, help = 'minimize area of mask')
+    #define classes
+    parser.add_argument('-c', '--classes', nargs='+', type = str, default = [], help = 'all classes')
+    # define delay time
+    parser.add_argument('-d', '--delay', type = int, default = 1, help = 'delay time')
 
-    # args = parser.parse_args()
-    # object_name_list = args.classes
-    # min_area = args.area
-    # delay_time = args.delay
-    # img_target_size = args.img
+    args = parser.parse_args()
+    object_name_list = args.classes
+    min_area = args.area
+    delay_time = args.delay
+    img_target_size = args.img
     print('classes list:', object_name_list)
     print('resize:',img_target_size)
     # set all objects' segmentation mask to block
@@ -91,6 +91,7 @@ def main():
         for object_name in object_name_list:
             objects = client.simListSceneObjects(f'{object_name}[\w]*')
             bbox_color_cnt = 0
+            # set mask color for each object
             for mesh_name in objects:
                 client.simSetSegmentationObjectID(mesh_name, mask_color_cnt + 1, True)
                 mask_color_cnt += 1
@@ -120,7 +121,7 @@ def main():
         seg_fname = SAVE_PATH_MASK + datetime_str
         ori_fname = SAVE_PATH_ORIGIN + datetime_str
         # save the original and segamentation image
-        cv2.imwrite(seg_fname + '.jpg', seg_png_ary)
+        cv2.imwrite(seg_fname + '.png', seg_png_ary)
         cv2.imwrite(ori_fname + '.jpg', ori_png_ary)
         
         # reset mask_color_cnt
@@ -129,24 +130,17 @@ def main():
         for idx, objects_num in enumerate(objects_cnt_list):
             # Initialize the bounding box list of the object
             bounding_boxes = []
-            for i in range(objects_num):
-                
-                # convert rgb to hsv
-                hsv_img = cv2.cvtColor(seg_png_ary, cv2.COLOR_BGR2HSV)
-                # resize rgb form
-                resize_color = (np.array([color_dict[mask_color_cnt+1]]).reshape(1,1,3)).astype(np.uint8)                
-                hsv_color_range = cv2.cvtColor(resize_color, cv2.COLOR_RGB2HSV)
-                mask = cv2.inRange(hsv_img, hsv_color_range - np.array([10,10,10]), hsv_color_range + np.array([10,10,10]))
-
-                # # Get target color's infomation
-                # mask_area = np.all(seg_png_ary == np.array(color_dict[mask_color_cnt+1]), axis=-1)
-                # # Set target color to white, others to block
-                # mask = np.zeros_like(seg_png_ary)
-                # mask[mask_area] = [255, 255, 255]
-                # mask[~mask_area] = [0, 0, 0]
-                # mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
-                # get area in the mask
-                
+            for i in range(objects_num):                
+                target_color = np.array(color_dict[mask_color_cnt+1])
+                target_color[0], target_color[2] = target_color[2], target_color[0]
+                # Get target color's infomation
+                mask_area = np.all(seg_png_ary == target_color, axis=-1)
+                # Set target color to white, others to block
+                mask = np.zeros_like(seg_png_ary)
+                mask[mask_area] = [255, 255, 255]
+                mask[~mask_area] = [0, 0, 0]
+                mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
+                # get area in the mask                
                 contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 mask_color_cnt += 1
                 with open(SAVE_PATH_JSON + datetime_str + ".txt", "a") as file:

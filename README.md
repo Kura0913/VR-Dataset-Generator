@@ -13,7 +13,7 @@ Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin fo
 * numpy 1.21.6
 * opencv
 ## How to Use
-### Install[Title](../../Colosseum/Colosseum5_2/PythonClient/detection_1/VRDatasetGenerator/generate.py)
+### Install
 All files please install in the same folder.
 
 And make sure that there are four folders original, mask, BBox and label.
@@ -44,7 +44,7 @@ And make sure that there are four folders original, mask, BBox and label.
 
 **example:** 
 ```cmd
-python generate.py --img 960 540 --area 3000 --classes Car Human --delay 0
+python generate.py --img 960 540 --area 3000 --classes cone --delay 0
 ```
 
 ### cleanfile.py
@@ -53,3 +53,5 @@ Remove all files in the original, mask, BBox and label folders.
 ### filterbbox.py and filterseg.py
 Because sometimes AirSim does not capture the mask and cannot generate the bounding box, you need to manually filter out the images that failed to generate. You can delete the image that does not generate a bounding box in the BBox, and then execute filterbbox.py to delete the corresponding data in the original, BBox, and label; or after deleting all black images in the mask, execute filterseg.py to delete the corresponding data in the original, BBox, and label.
 
+## VR Environment
+coming soon.
