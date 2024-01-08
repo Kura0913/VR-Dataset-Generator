@@ -93,10 +93,11 @@ def main():
             bbox_color_cnt = 0
             # set mask color for each object
             for mesh_name in objects:
-                client.simSetSegmentationObjectID(mesh_name, mask_color_cnt + 1, True)
-                mask_color_cnt += 1
-                # record each object's num
-                bbox_color_cnt += 1
+                if mask_color_cnt + 1 < 255:
+                    client.simSetSegmentationObjectID(mesh_name, mask_color_cnt + 1, True)
+                    mask_color_cnt += 1
+                    # record each object's num
+                    bbox_color_cnt += 1
             # save object's num to list
             objects_cnt_list.append(bbox_color_cnt)
         # print the nums of each object

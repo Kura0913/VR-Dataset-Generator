@@ -8,7 +8,7 @@ Unreal Engine recommends using 4.25, 4.27, 5.1, 5.2.
 Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin for Unreal Engine.
 
 ## Requirement
-* AirSim API: Please read this [page](https://microsoft.github.io/AirSim/apis/) to install AirSim API.
+* AirSim API : Please read this [page](https://microsoft.github.io/AirSim/apis/) to install AirSim API.
 * wheel 0.42.0
 * numpy 1.21.6
 * opencv
@@ -42,6 +42,10 @@ And make sure that there are four folders original, mask, BBox and label.
 * --classes: Set the class to generate labels for, making sure the class name starts with the name of the mesh in the VR environment.
 * --delay: Set how often to generate images.
 
+### Notice:
+The number of objects generated at a time cannot exceed 253 (including objects outside the field of view).
+
+
 **example:** 
 ```cmd
 python generate.py --img 960 540 --area 3000 --classes cone --delay 0
@@ -54,4 +58,22 @@ Remove all files in the original, mask, BBox and label folders.
 Because sometimes AirSim does not capture the mask and cannot generate the bounding box, you need to manually filter out the images that failed to generate. You can delete the image that does not generate a bounding box in the BBox, and then execute filterbbox.py to delete the corresponding data in the original, BBox, and label; or after deleting all black images in the mask, execute filterseg.py to delete the corresponding data in the original, BBox, and label.
 
 ## VR Environment
-coming soon.
+### TaiwanTrafficObjectDetect.zip
+Unzip and use directly, please check whether the path : **.\TaiwanTrafficObjectDetect\Windows\\** contains settings.json. 
+
+If not, please add it yourself.
+
+**settings.json** is also on github.
+
+Click **GenerateDataset.exe** to start the environment.
+
+In this VR environment, there are the following objects : **cone, fence, curvemirror, jerseybarrier, transformerbox, delineator**.
+
+
+
+In this environment, the recommended parameter settings are as follows :
+```cmd
+python generate.py --img 960 540 --area 50 --classes cone fence curvemirror jerseybarrier transformerbox delineator --delay 0
+```
+
+You can also adjust the parameters to suit your needs
