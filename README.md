@@ -76,4 +76,4 @@ In this environment, the recommended parameter settings are as follows :
 python generate.py --img 960 540 --area 50 --classes cone fence curvemirror jerseybarrier transformerbox delineator --delay 0
 ```
 
-You can also adjust the parameters to suit your needs
+You can also adjust the parameters to suit your needs.
