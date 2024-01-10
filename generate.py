@@ -124,7 +124,7 @@ def main():
             seg_fname = SAVE_PATH_MASK + datetime_str
             ori_fname = SAVE_PATH_ORIGIN + datetime_str
             # save the original and segamentation image
-            cv2.imwrite(seg_fname + '.png', seg_png_ary)
+            cv2.imwrite(seg_fname + '.jpg', seg_png_ary)
             cv2.imwrite(ori_fname + '.jpg', ori_png_ary)
             
             # reset mask_color_cnt
