@@ -63,9 +63,9 @@ def main():
     # define image size
     parser.add_argument('-i', '--img', nargs='+',  type = int, default = [1920, 1080],  help = 'Image new size')
     # define minimize area of mask
-    parser.add_argument('-a', '--area', type = int, default = 3000, help = 'minimize area of mask')
+    parser.add_argument('-a', '--area', type = int, default = 100, help = 'minimize area of mask')
     #define classes
-    parser.add_argument('-c', '--classes', nargs='+', type = str, default = [], help = 'all classes')
+    parser.add_argument('-c', '--classes', nargs='+', type = str, default = ['cone'], help = 'all classes')
     # define delay time
     parser.add_argument('-d', '--delay', type = int, default = 1, help = 'delay time')
 

@@ -33,8 +33,8 @@ And make sure that there are four folders original, mask, BBox and label.
 | parameter name | parameter |
 | :--: |:--:|
 | image size | 1920*1080 |
-| area | 3000 |
-| classes | None |
+| area | 100 |
+| classes | cone |
 | delay | 1 |
 
 * --img: Set output image size.
@@ -48,7 +48,7 @@ The number of objects generated at a time cannot exceed 253 (including objects o
 
 **example:** 
 ```cmd
-python generate.py --img 960 540 --area 3000 --classes cone --delay 0
+python generate.py --img 960 540 --area 100 --classes cone --delay 0
 ```
 
 ### cleanfile.py
