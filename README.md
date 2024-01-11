@@ -8,6 +8,7 @@ Unreal Engine recommends using 4.25, 4.27, 5.1, 5.2.
 Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin for Unreal Engine.
 
 ## Requirement
+* Python 3.9
 * AirSim API : Please read this [page](https://microsoft.github.io/AirSim/apis/) to install AirSim API.
 * wheel 0.42.0
 * numpy 1.21.6
@@ -33,7 +34,7 @@ And make sure that there are four folders original, mask, BBox and label.
 | parameter name | parameter |
 | :--: |:--:|
 | image size | 1920*1080 |
-| area | 100 |
+| area | 00 |
 | classes | cone |
 | delay | 1 |
 
