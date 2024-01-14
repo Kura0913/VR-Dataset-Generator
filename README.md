@@ -76,7 +76,7 @@ In this VR environment, there are the following objects : **cone, fence, curvemi
 
 In this environment, the recommended parameter settings are as follows：
 ```cmd
-python generate.py --img 960 540 --area 50 --classes cone fence curvemirror jerseybarrier transformerbox delineator --delay 0
+python generate.py --img 960 540 --area 50 --classes cone delineator jerseybarrier curvemirror transformerbox fence --delay 0
 ```
 
 You can also adjust the parameters to suit your needs.

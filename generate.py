@@ -19,7 +19,7 @@ ori_image = airsim.ImageType.Scene
 seg_image = airsim.ImageType.Segmentation
 
 # object list
-object_name_list = ['cone', 'fence', 'curvemirror', 'jerseybarrier', 'transformerbox', 'delineator']
+object_name_list = ['cone', 'delineator', 'jerseybarrier', 'curvemirror', 'transformerbox', 'fence']
 # Set the minimum Bounding Box area, which can be used to filter out objects that are too small.
 min_area = 100
 # counter
@@ -36,7 +36,7 @@ color_dict = {}
 img_target_size = [960, 540]
 # delay time
 delay_time = 1
-
+# get color list for mask
 def getColorList():
     global color_dict
     with open("seg_rgbs.txt", "r") as file:
@@ -49,7 +49,7 @@ def getColorList():
             # add key and color to the dict
             color_dict[index] = color_rgb
 
-
+# check the variable of image size
 def check_image_count(value):
     if len(value) != 2:
         if len(value) <= 1:
@@ -57,13 +57,18 @@ def check_image_count(value):
         else:
             nums = [value[0], value[1]]
     return nums
+# save classes list to classes.txt
+def save_classes_list(object_name_list):
+    with open(SAVE_PATH_JSON + "classes.txt", "a") as file:
+        for class_name in object_name_list:        
+            file.write(f'{class_name}\n')
 
 def main():
     parser = argparse.ArgumentParser(description='Description of your script')
     # define image size
     parser.add_argument('-i', '--img', nargs='+',  type = int, default = [1920, 1080],  help = 'Image new size')
     # define minimize area of mask
-    parser.add_argument('-a', '--area', type = int, default = 100, help = 'minimize area of mask')
+    parser.add_argument('-a', '--area', type = int, default = 3000, help = 'minimize area of mask')
     #define classes
     parser.add_argument('-c', '--classes', nargs='+', type = str, default = ['cone'], help = 'all classes')
     # define delay time
@@ -81,6 +86,10 @@ def main():
 
     # get color list
     getColorList()
+    # save classes.txt
+    save_classes_list(object_name_list)
+
+
     # start the program
     while True:
         # reset the counter
