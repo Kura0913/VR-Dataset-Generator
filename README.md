@@ -60,7 +60,9 @@ Because sometimes AirSim does not capture the mask and cannot generate the bound
 
 ## VR Environment
 ### TaiwanTrafficObjectDetect.zip
-Unzip and use directly, please check whether the path : **.\TaiwanTrafficObjectDetect\Windows\\** contains settings.json. 
+[**Download Link**](https://1drv.ms/f/s!Amw-cef48mmfmkmK3i96dVAVeLpm?e=dtsOZu)
+
+Unzip and use directly, please check whether the path : **.\TaiwanTrafficObjectDetect\Windows\\** contains settings.json.
 
 If not, please add it yourself.
 
@@ -72,7 +74,7 @@ In this VR environment, there are the following objects : **cone, fence, curvemi
 
 
 
-In this environment, the recommended parameter settings are as follows :
+In this environment, the recommended parameter settings are as follows：
 ```cmd
 python generate.py --img 960 540 --area 50 --classes cone fence curvemirror jerseybarrier transformerbox delineator --delay 0
 ```
