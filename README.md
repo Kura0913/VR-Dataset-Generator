@@ -1,6 +1,6 @@
 # VR Dartaset Generator
 ## Directions
-This toll can generate VR training dataset for yolo.
+This tool can generate VR object detection training dataset for yolo.
 You can use this tool in any VR environment developed by [Unreal Engine](https://www.unrealengine.com/en-US), and the environment must have the AirSim plugin installed.
 
 Unreal Engine recommends using 4.25, 4.27, 5.1, 5.2.
