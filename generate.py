@@ -13,7 +13,7 @@ SAVE_PATH_BBOX = '.\BBox\\'
 SAVE_PATH_JSON = '.\label\\'
 # controller
 is_generate = True
-
+get_log = False
 # airsim image type
 ori_image = airsim.ImageType.Scene
 seg_image = airsim.ImageType.Segmentation
@@ -36,6 +36,7 @@ color_dict = {}
 img_target_size = [960, 540]
 # delay time
 delay_time = 1
+
 # get color list for mask
 def getColorList():
     global color_dict
@@ -63,7 +64,31 @@ def save_classes_list(object_name_list):
         for class_name in object_name_list:        
             file.write(f'{class_name}\n')
 
+def checkPose(prev_pose : airsim.Pose, curr_pose : airsim.Pose):
+    def checkPosition(prev_loc_, curr_loc_):
+        if(prev_loc_.x_val == curr_loc_.x_val and prev_loc_.y_val == curr_loc_.y_val and prev_loc_.z_val == curr_loc_.z_val):
+            return True
+        else:
+            return False
+    def checkOrientation(prev_ori_, curr_ori_):
+        if(prev_ori_.w_val == curr_ori_.w_val and prev_ori_.x_val == curr_ori_.x_val and prev_ori_.y_val == curr_ori_.y_val and prev_ori_.z_val == curr_ori_.z_val):
+            return True
+        else:
+            return False
+
+    prev_ori = prev_pose.orientation
+    prev_loc = prev_pose.position
+    curr_ori = curr_pose.orientation
+    curr_loc = curr_pose.position
+
+    if checkPosition(prev_loc, curr_loc) and checkOrientation(prev_ori, curr_ori):
+        return True
+    else:
+        return False
+
+print('---------------------------------------connect succesed!!------------------------------------')
 def main():
+    global get_log
     parser = argparse.ArgumentParser(description='Description of your script')
     # define image size
     parser.add_argument('-i', '--img', nargs='+',  type = int, default = [1920, 1080],  help = 'Image new size')
@@ -82,16 +107,29 @@ def main():
     print('classes list:', object_name_list)
     print('resize:',img_target_size)
     # set all objects' segmentation mask to block
-    print(client.simSetSegmentationObjectID("[\w]*",0,True))
+    client.simSetSegmentationObjectID("[\w]*",0,True)
 
     # get color list
     getColorList()
     # save classes.txt
     save_classes_list(object_name_list)
 
+    vehicle_prev_pose = client.simGetVehiclePose()
 
     # start the program
     while True:
+        vehicle_curr_pose = client.simGetVehiclePose()
+        if (not checkPose(vehicle_prev_pose, vehicle_curr_pose)):
+            print(f'Please stop moving to start generate VR dataset.')
+            get_log = False
+            vehicle_prev_pose = vehicle_curr_pose
+            time.sleep(1)
+            continue
+        else:
+            if (not get_log):
+                print('Start generate dataset...')
+                get_log = True
+        vehicle_prev_pose = vehicle_curr_pose
         # reset the counter
         mask_color_cnt = 0
         bbox_color_cnt = 0
