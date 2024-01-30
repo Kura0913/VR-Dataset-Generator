@@ -1,0 +1,31 @@
+{
+    "file_path":
+    {
+        "detection":
+        {
+            "bbox":".\\detection\\bbox\\",
+            "original":".\\detection\\original\\",
+            "mask":".\\detection\\mask\\",
+            "label":".\\detection\\label\\"
+        },
+        "segmentation":
+        {
+            "segphoto":".\\segmentation\\segphoto\\",
+            "original":".\\segmentation\\original\\",
+            "mask":".\\segmentation\\mask\\",
+            "label":".\\segmentation\\label\\"
+        }
+    },
+    "config":
+    {
+        "mode":"segmentation",
+        "photo_size":
+        {
+            "width":1920,
+            "height":1080
+        },
+        "area":100,
+        "classes":"cone delineator jerseybarrier curvemirror transformerbox fence",
+        "delay":0
+    }
+}

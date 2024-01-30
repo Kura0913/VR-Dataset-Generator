@@ -2,44 +2,12 @@ import airsim
 import cv2
 import time
 from datetime import datetime
-import argparse
 import numpy as np
-
-
-# set save path
-SAVE_PATH_ORIGIN = '.\original\\'
-SAVE_PATH_MASK = '.\mask\\'
-SAVE_PATH_BBOX = '.\BBox\\'
-SAVE_PATH_JSON = '.\label\\'
-# controller
-is_generate = True
-get_log = False
-# airsim image type
-ori_image = airsim.ImageType.Scene
-seg_image = airsim.ImageType.Segmentation
-
-# object list
-object_name_list = ['cone', 'delineator', 'jerseybarrier', 'curvemirror', 'transformerbox', 'fence']
-# Set the minimum Bounding Box area, which can be used to filter out objects that are too small.
-min_area = 100
-# counter
-mask_color_cnt = 0
-bbox_color_cnt = 0
-objects_cnt_list = []
-# set camera name
-camera_name = 0
-# connected to arisim client
-client = airsim.VehicleClient()
-# save the color info
-color_dict = {}
-# img resize info
-img_target_size = [960, 540]
-# delay time
-delay_time = 1
+import json
 
 # get color list for mask
 def getColorList():
-    global color_dict
+    color_dict = {}
     with open("seg_rgbs.txt", "r") as file:
         for line in file:
             # Split data, get key and RGB color values
@@ -50,17 +18,10 @@ def getColorList():
             # add key and color to the dict
             color_dict[index] = color_rgb
 
-# check the variable of image size
-def check_image_count(value):
-    if len(value) != 2:
-        if len(value) <= 1:
-            raise argparse.ArgumentTypeError("Exactly 2 nums are required.")
-        else:
-            nums = [value[0], value[1]]
-    return nums
+    return color_dict
 # save classes list to classes.txt
-def save_classes_list(object_name_list):
-    with open(SAVE_PATH_JSON + "classes.txt", "a") as file:
+def save_classes_list(path, object_name_list):
+    with open(path + "classes.txt", "a") as file:
         for class_name in object_name_list:        
             file.write(f'{class_name}\n')
 
@@ -86,33 +47,50 @@ def checkPose(prev_pose : airsim.Pose, curr_pose : airsim.Pose):
     else:
         return False
 
-print('---------------------------------------connect succesed!!------------------------------------')
-def main():
-    global get_log
-    parser = argparse.ArgumentParser(description='Description of your script')
-    # define image size
-    parser.add_argument('-i', '--img', nargs='+',  type = int, default = [1920, 1080],  help = 'Image new size')
-    # define minimize area of mask
-    parser.add_argument('-a', '--area', type = int, default = 3000, help = 'minimize area of mask')
-    #define classes
-    parser.add_argument('-c', '--classes', nargs='+', type = str, default = ['cone'], help = 'all classes')
-    # define delay time
-    parser.add_argument('-d', '--delay', type = int, default = 1, help = 'delay time')
 
-    args = parser.parse_args()
-    object_name_list = args.classes
-    min_area = args.area
-    delay_time = args.delay
-    img_target_size = args.img
+def main():
+    # load json
+    with open("config_setting.json", encoding="utf-8") as json_file:
+        config_setting = json.load(json_file)
+    # set save path
+    SAVE_PATH_ORIGINAL = config_setting['file_path']['detection']['original']
+    SAVE_PATH_MASK = config_setting['file_path']['detection']['mask']
+    SAVE_PATH_BBOX = config_setting['file_path']['detection']['bbox']
+    SAVE_PATH_LABEL = config_setting['file_path']['detection']['label']
+    # controller
+    get_log = False
+    # airsim image type
+    ori_image = airsim.ImageType.Scene
+    seg_image = airsim.ImageType.Segmentation
+
+    # object list
+    object_name_list = config_setting['config']['classes'].split(' ')
+    # Set the minimum Bounding Box area, which can be used to filter out objects that are too small.
+    min_area = config_setting['config']['area']
+    # img resize info
+    img_target_size = [config_setting['config']['image_size']['width'], config_setting['config']['image_size']['height']]
+    # delay time
+    delay_time = config_setting['config']['delay']
+    # counter
+    mask_color_cnt = 0
+    bbox_color_cnt = 0
+    objects_cnt_list = []
+    # set camera name
+    camera_name = 0
+    # save the color info
+    color_dict = {}
+    # connected to arisim client
+    client = airsim.VehicleClient()
+    print('---------------------------------------connect succesed!!------------------------------------')
     print('classes list:', object_name_list)
     print('resize:',img_target_size)
     # set all objects' segmentation mask to block
     client.simSetSegmentationObjectID("[\w]*",0,True)
 
     # get color list
-    getColorList()
+    color_dict = getColorList()
     # save classes.txt
-    save_classes_list(object_name_list)
+    save_classes_list(SAVE_PATH_LABEL, object_name_list)
 
     vehicle_prev_pose = client.simGetVehiclePose()
 
@@ -130,6 +108,7 @@ def main():
                 print('Start generate dataset...')
                 get_log = True
         vehicle_prev_pose = vehicle_curr_pose
+        
         # reset the counter
         mask_color_cnt = 0
         bbox_color_cnt = 0
@@ -147,8 +126,10 @@ def main():
                     bbox_color_cnt += 1
             # save object's num to list
             objects_cnt_list.append(bbox_color_cnt)
-        # print the nums of each object
-        
+        # if there are no objects
+        if all(num == 0 for num in objects_cnt_list):
+            time.sleep(0.5)
+            continue
         # get original image from airsim
         oriRawImage = client.simGetImage(camera_name, ori_image)
         # get segmentation image from airsim
@@ -169,7 +150,7 @@ def main():
 
             datetime_str = datetime.utcnow().strftime('%Y%m%d%H%M%S%f')
             seg_fname = SAVE_PATH_MASK + datetime_str
-            ori_fname = SAVE_PATH_ORIGIN + datetime_str
+            ori_fname = SAVE_PATH_ORIGINAL + datetime_str
             # save the original and segamentation image
             cv2.imwrite(seg_fname + '.jpg', seg_png_ary)
             cv2.imwrite(ori_fname + '.jpg', ori_png_ary)
@@ -193,7 +174,7 @@ def main():
                     # get area in the mask                
                     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                     mask_color_cnt += 1
-                    with open(SAVE_PATH_JSON + datetime_str + ".txt", "a") as file:
+                    with open(SAVE_PATH_LABEL + datetime_str + ".txt", "a") as file:
                         for contour in contours:
                             # Calculate area
                             area = cv2.contourArea(contour)

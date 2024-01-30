@@ -1,62 +1,98 @@
-# VR Dartaset Generator
+# VR-Dataset-Generator
 ## Directions
-This tool can generate VR object detection training dataset for yolo.
+This tool can generate VR object detection and segmentation training dataset for yolov7.
 You can use this tool in any VR environment developed by [Unreal Engine](https://www.unrealengine.com/en-US), and the environment must have the AirSim plugin installed.
 
 Unreal Engine recommends using 4.25, 4.27, 5.1, 5.2.
 
 Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin for Unreal Engine.
 
-## Requirement
+## Environment
 * Python 3.9
+* numpy 1.21.6
 * AirSim API : Please read this [page](https://microsoft.github.io/AirSim/apis/) to install AirSim API.
 * wheel 0.42.0
-* numpy 1.21.6
-* opencv
-## How to Use
-### Install
-All files please install in the same folder.
+* opencv-python
+## Useage
+### Installation
+* Clone this repo
 
-And make sure that there are four folders original, mask, BBox and label.
+```cmd
+git  clone https://github.com/Kura0913/VR-Dataset-generator.git
+```
 
-* original will save original picture.
+* file tree
+```
+VR-Dataset-generator
+|   cleanfile.py
+|   config_setting.json
+|   filter.py
+|   generatedet.py
+|   generateseg.py
+|   ouput.txt
+|   README.md
+|   run.py
+|   seg_rgbs.txt
+|   
++---detection
+|   +---bbox
+|   |       bbox_example.jpg
+|   |       
+|   +---label
+|   |       bbox_example.txt
+|   |       classes.txt
+|   |       
+|   +---mask
+|   |       bbox_example.jpg
+|   |       
+|   \---original
+|           bbox_example.jpg
+|           
+\---segmentation
+    +---label
+    |       seg_example.txt
+    |       classes.txt
+    |       
+    +---mask
+    |       seg_example.jpg
+    |       
+    +---original
+    |       seg_example.jpg
+    |       
+    \---segphoto
+            seg_example.jpg
+```
 
-* mask will save segmentation mask picture.
 
-* BBox will save the original picture with bounding box.
+### config_Setting.json
 
-* label will save .txt file with bounding box information.
-
-
-### generate.py
-
-**Default parameters:**
-| parameter name | parameter |
-| :--: |:--:|
-| image size | 1920*1080 |
-| area | 00 |
-| classes | cone |
-| delay | 1 |
-
-* --img: Set output image size.
-* --area: Set the minimum area of mask, if mask's area is smaller than minimum area, tool will not generate bounding box for the mask.
-* --classes: Set the class to generate labels for, making sure the class name starts with the name of the mesh in the VR environment.
-* --delay: Set how often to generate images.
+* mode:'detection' or 'segmentation'
+* image_size:Set output image size
+* area: Set the minimum area of mask, if mask's area is smaller than minimum area, tool will not generate bounding box or segmentation for the object.
+* classes: Set the class to generate dataset for, making sure the class name starts with the name of the mesh in the VR environment.
+* delay: Set how often to generate images.
 
 ### Notice:
 The number of objects generated at a time cannot exceed 253 (including objects outside the field of view).
-
-
-**example:** 
+### run.py
+Start generating the dataset, please make sure to execute the VR environment before executing the command.
 ```cmd
-python generate.py --img 960 540 --area 100 --classes cone --delay 0
+python run.py
+```
+### cleanfile.py
+Remove all files in the corresponding folder in the specified mode.
+```cmd
+python cleanfile.py
 ```
 
-### cleanfile.py
-Remove all files in the original, mask, BBox and label folders.
+### filter.py
+Remove redundant files in the corresponding folder in the specified mode.
+```cmd
+python filter.py
+```
 
-### filterbbox.py and filterseg.py
-Because sometimes AirSim does not capture the mask and cannot generate the bounding box, you need to manually filter out the images that failed to generate. You can delete the image that does not generate a bounding box in the BBox, and then execute filterbbox.py to delete the corresponding data in the original, BBox, and label; or after deleting all black images in the mask, execute filterseg.py to delete the corresponding data in the original, BBox, and label.
+deteection:The filtering basis is the files in the **bbox**.
+segmentation:The filtering basis is the files in the **segphoto**.
 
 ## VR Environment
 ### TaiwanTrafficObjectDetect.zip
@@ -70,13 +106,4 @@ If not, please add it yourself.
 
 Click **GenerateDataset.exe** to start the environment.
 
-In this VR environment, there are the following objects : **cone, fence, curvemirror, jerseybarrier, transformerbox, delineator**.
-
-
-
-In this environment, the recommended parameter settings are as follows：
-```cmd
-python generate.py --img 960 540 --area 50 --classes cone delineator jerseybarrier curvemirror transformerbox fence --delay 0
-```
-
-You can also adjust the parameters to suit your needs.
+In this VR environment, there are the following objects : **cone delineator jerseybarrier curvemirror transformerbox fence**.
