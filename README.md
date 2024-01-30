@@ -13,7 +13,7 @@ Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin fo
 ![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg)![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg)
 
 ### Segmentation example
-![](https://github.com/Kura0913/VR-Dataset-Generator/tree/master/segmentation/original)![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg)
+![](https://github.com/Kura0913/VR-Dataset-Generator/tree/master/segmentation/original/seg_example.jpg)![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg)
 
 ## Environment
 * Python 3.9
