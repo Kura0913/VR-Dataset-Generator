@@ -11,14 +11,14 @@ Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin fo
 ### Detection example
 <div style="display:inline-block">
 <center class='half'>
-<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg" alt="image1" width="350"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg" alt="image2" width="350">
+<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg" alt="image1" width="400"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg" alt="image2" width="400">
 </center>
 </div>
 
 ### Segmentation example
 <div style="display:inline-block">
 <center class='half'>
-<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/original/seg_example.jpg" alt="image1" width="350"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg" alt="image2" width="350">
+<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/original/seg_example.jpg" alt="image1" width="400"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg" alt="image2" width="400">
 </center>
 </div>
 
