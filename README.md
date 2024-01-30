@@ -10,13 +10,14 @@ Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin fo
 
 ### Detection example
 <center class='half'>
-<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg" width="400"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg" width="400">
+<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg" width="350"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg" width="350">
 </center>
 
 ### Segmentation example
 <center class='half'>
-<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/original/seg_example.jpg" width="400"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg" width="400">
+<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/original/seg_example.jpg" width="350"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg" width="350">
 </center>
+
 ## Environment
 * Python 3.9
 * numpy 1.21.6
@@ -89,6 +90,12 @@ Start generating the dataset, please make sure to execute the VR environment bef
 ```cmd
 python run.py
 ```
+
+The generated file will be placed in the folder in the corresponding mode.
+detection:bbox, mask, original, label will have file with the same file name in them, you can delete bad cases in bbox and then filter files in other folders via filter.py
+
+segmentation:segphoto, mask, original, label will have file with the same file name in them, you can delete bad cases in segphoto and then filter files in other folders via filter.py
+
 ### cleanfile.py
 Remove all files in the corresponding folder in the specified mode.
 ```cmd
@@ -96,7 +103,9 @@ python cleanfile.py
 ```
 
 ### filter.py
-Remove redundant files in the corresponding folder in the specified mode.
+detection:Compare files in **bbox** and delete redundant files in mask, original, and label.
+segmentation:Compare files in **segphoto** and delete redundant files in mask, original, and label.
+
 ```cmd
 python filter.py
 ```
