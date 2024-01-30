@@ -9,11 +9,12 @@ Unreal Engine recommends using 4.25, 4.27, 5.1, 5.2.
 Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin for Unreal Engine.
 
 ### Detection example
-
-![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg)![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg)
+<center class='half'>
+<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg" width="500"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg" width="500">
+</center>
 
 ### Segmentation example
-![](https://github.com/Kura0913/VR-Dataset-Generator/tree/master/segmentation/original/seg_example.jpg)![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg)
+<image src="https://github.com/Kura0913/VR-Dataset-Generator/tree/master/segmentation/original/seg_example.jpg" width="500"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg" width="500">
 
 ## Environment
 * Python 3.9
