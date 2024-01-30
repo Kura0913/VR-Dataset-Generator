@@ -1,11 +1,19 @@
 # VR-Dataset-Generator
 ## Directions
 This tool can generate VR object detection and segmentation training dataset for yolov7.
+
 You can use this tool in any VR environment developed by [Unreal Engine](https://www.unrealengine.com/en-US), and the environment must have the AirSim plugin installed.
 
 Unreal Engine recommends using 4.25, 4.27, 5.1, 5.2.
 
 Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin for Unreal Engine.
+
+### Detection example
+
+![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg)![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg)
+
+### Segmentation example
+![](https://github.com/Kura0913/VR-Dataset-Generator/tree/master/segmentation/original)![](https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg)
 
 ## Environment
 * Python 3.9
@@ -18,7 +26,7 @@ Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin fo
 * Clone this repo
 
 ```cmd
-git  clone https://github.com/Kura0913/VR-Dataset-generator.git
+git clone https://github.com/Kura0913/VR-Dataset-generator.git
 ```
 
 * file tree
