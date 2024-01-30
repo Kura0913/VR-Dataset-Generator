@@ -39,42 +39,43 @@ git clone https://github.com/Kura0913/VR-Dataset-generator.git
 * file tree
 ```
 VR-Dataset-generator
-|   cleanfile.py
-|   config_setting.json
-|   filter.py
-|   generatedet.py
-|   generateseg.py
-|   ouput.txt
-|   README.md
-|   run.py
-|   seg_rgbs.txt
-|   
-+---detection
-|   +---bbox
-|   |       bbox_example.jpg
-|   |       
-|   +---label
-|   |       bbox_example.txt
-|   |       classes.txt
-|   |       
-|   +---mask
-|   |       bbox_example.jpg
-|   |       
-|   \---original
-|           bbox_example.jpg
-|           
-\---segmentation
-    +---label
-    |       seg_example.txt
-    |       classes.txt
-    |       
-    +---mask
-    |       seg_example.jpg
-    |       
-    +---original
-    |       seg_example.jpg
-    |       
-    \---segphoto
+│  cleanfile.py
+│  config_setting.json
+│  filter.py
+│  generatedet.py
+│  generateseg.py
+│  ouput.txt
+│  README.md
+│  run.py
+│  seg_rgbs.txt
+│  settings.json
+│  
+├─detection
+│  ├─bbox
+│  │      bbox_example.jpg
+│  │      
+│  ├─label
+│  │      bbox_example.txt
+│  │      classes.txt
+│  │      
+│  ├─mask
+│  │      bbox_example.jpg
+│  │      
+│  └─original
+│          bbox_example.jpg
+│          
+└─segmentation
+    ├─label
+    │      classes.txt
+    │      seg_example.txt
+    │      
+    ├─mask
+    │      seg_example.jpg
+    │      
+    ├─original
+    │      seg_example.jpg
+    │      
+    └─segphoto
             seg_example.jpg
 ```
 
