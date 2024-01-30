@@ -9,14 +9,18 @@ Unreal Engine recommends using 4.25, 4.27, 5.1, 5.2.
 Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin for Unreal Engine.
 
 ### Detection example
+<div style="display:inline-block">
 <center class='half'>
-<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg" width="350"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg" width="350">
+<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg" alt="image1" width="350"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg" alt="image2" width="350">
 </center>
+</div>
 
 ### Segmentation example
+<div style="display:inline-block">
 <center class='half'>
-<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/original/seg_example.jpg" width="350"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg" width="350">
+<image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/original/seg_example.jpg" alt="image1" width="350"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg" alt="image2" width="350">
 </center>
+</div>
 
 ## Environment
 * Python 3.9
