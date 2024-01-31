@@ -55,7 +55,7 @@ def main():
     SAVE_PATH_SEGPHOTO = config_setting['file_path']['segmentation']['segphoto']
     SAVE_PATH_LABEL = config_setting['file_path']['segmentation']['label']
     # object list
-    object_name_list = ['cone', 'fence', 'curvemirror', 'jerseybarrier', 'transformerbox', 'delineator']
+    object_name_list = config_setting['config']['classes'].split(' ')
     # Set the minimum Bounding Box area, which can be used to filter out objects that are too small.
     min_area = config_setting['config']['area']
     # img resize info

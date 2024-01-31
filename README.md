@@ -8,27 +8,32 @@ Unreal Engine recommends using 4.25, 4.27, 5.1, 5.2.
 
 Read this [page](https://microsoft.github.io/AirSim) to install AirSim plugin for Unreal Engine.
 
-### Detection example
+**Notice:The number of objects generated at a time cannot exceed 253 (including objects outside the field of view).**
+
+## Example
+### Detection
 <div style="display:inline-block">
 <center class='half'>
 <image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/original/bbox_example.jpg" alt="image1" width="400"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/detection/bbox/bbox_example.jpg" alt="image2" width="400">
 </center>
 </div>
 
-### Segmentation example
+### Segmentation
 <div style="display:inline-block">
 <center class='half'>
 <image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/original/seg_example.jpg" alt="image1" width="400"><image src="https://github.com/Kura0913/VR-Dataset-Generator/blob/master/segmentation/segphoto/seg_example.jpg" alt="image2" width="400">
 </center>
 </div>
 
-## Environment
+
+## Useage
+### Requirement
 * Python 3.9
 * numpy 1.21.6
 * AirSim API : Please read this [page](https://microsoft.github.io/AirSim/apis/) to install AirSim API.
 * wheel 0.42.0
 * opencv-python
-## Useage
+
 ### Installation
 * Clone this repo
 
@@ -88,8 +93,6 @@ VR-Dataset-generator
 * classes: Set the class to generate dataset for, making sure the class name starts with the name of the mesh in the VR environment.
 * delay: Set how often to generate images.
 
-### Notice:
-The number of objects generated at a time cannot exceed 253 (including objects outside the field of view).
 ### run.py
 Start generating the dataset, please make sure to execute the VR environment before executing the command.
 ```cmd
