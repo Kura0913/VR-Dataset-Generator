@@ -201,6 +201,8 @@ def main():
             bbox_fname = SAVE_PATH_BBOX + datetime_str
             cv2.imwrite(bbox_fname + '.jpg', bbox_image)
 
+        print(f'Generate success, {datetime_str} is saved to folders under detection.')
+
         time.sleep(delay_time)
 
 if __name__ == "__main__":

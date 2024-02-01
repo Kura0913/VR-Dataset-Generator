@@ -198,6 +198,8 @@ def main():
             seg_fname = SAVE_PATH_SEGPHOTO + datetime_str
             cv2.imwrite(seg_fname + '.jpg', seg_output_image)
 
+        print(f'Generate success, {datetime_str} is saved to folders under segmentation.')
+
         time.sleep(delay_time)
 
 if __name__ == "__main__":

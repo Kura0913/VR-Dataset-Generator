@@ -100,6 +100,7 @@ python run.py
 ```
 
 The generated file will be placed in the folder in the corresponding mode.
+
 detection:bbox, mask, original, label will have file with the same file name in them, you can delete bad cases in bbox and then filter files in other folders via filter.py
 
 segmentation:segphoto, mask, original, label will have file with the same file name in them, you can delete bad cases in segphoto and then filter files in other folders via filter.py
