@@ -124,7 +124,7 @@ segmentation:The filtering basis is the files in the **segphoto**.
 
 ## VR Environment
 ### TaiwanTrafficObjectDetect.zip
-[**Download Link**](https://1drv.ms/f/s!Amw-cef48mmfmkmK3i96dVAVeLpm?e=dtsOZu)
+[**Download Link**](https://1drv.ms/u/s!Amw-cef48mmfmmOPSrWkcKfEWTdx?e=MroVL9)
 
 Unzip and use directly, please check whether the path : **.\TaiwanTrafficObjectDetect\Windows\\** contains settings.json.
 
