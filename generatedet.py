@@ -59,9 +59,6 @@ def main():
     SAVE_PATH_LABEL = config_setting['file_path']['detection']['label']
     # controller
     get_log = False
-    # airsim image type
-    ori_image = airsim.ImageType.Scene
-    seg_image = airsim.ImageType.Segmentation
 
     # object list
     object_name_list = config_setting['config']['classes'].split(' ')
@@ -130,30 +127,35 @@ def main():
         if all(num == 0 for num in objects_cnt_list):
             time.sleep(0.5)
             continue
+        # get images response
+        ori_response, seg_response,  = client.simGetImages(
+            [airsim.ImageRequest(camera_name, airsim.ImageType.Scene), airsim.ImageRequest(camera_name, airsim.ImageType.Segmentation)]
+        )
+
         # get original image from airsim
-        oriRawImage = client.simGetImage(camera_name, ori_image)
+        ori_raw_image = ori_response.image_data_uint8
         # get segmentation image from airsim
-        segRawImage = client.simGetImage(camera_name, seg_image)
+        seg_raw_image = seg_response.image_data_uint8
+
         # trans to uint_8 array form
-        bbox_image = cv2.imdecode(airsim.string_to_uint8_array(oriRawImage), cv2.IMREAD_COLOR)
-        ori_png_ary = cv2.imdecode(airsim.string_to_uint8_array(oriRawImage), cv2.IMREAD_COLOR)
-        seg_png_ary = cv2.imdecode(airsim.string_to_uint8_array(segRawImage), cv2.IMREAD_COLOR)
+        bbox_img_ary = cv2.imdecode(airsim.string_to_uint8_array(ori_raw_image), cv2.IMREAD_COLOR)
+        ori_img_ary = cv2.imdecode(airsim.string_to_uint8_array(ori_raw_image), cv2.IMREAD_COLOR)
+        seg_img_ary = cv2.imdecode(airsim.string_to_uint8_array(seg_raw_image), cv2.IMREAD_COLOR)
+
         # check wheather get masks
-        is_black = np.all(seg_png_ary == 0)
+        is_black = np.all(seg_img_ary == 0)
         if ~is_black:
             # resize the image
-            bbox_image = cv2.resize(bbox_image, img_target_size)
-            ori_png_ary = cv2.resize(ori_png_ary, img_target_size)
-            seg_png_ary = cv2.resize(seg_png_ary, img_target_size)
-
-
+            bbox_img_ary = cv2.resize(bbox_img_ary, img_target_size)
+            ori_img_ary = cv2.resize(ori_img_ary, img_target_size)
+            seg_img_ary = cv2.resize(seg_img_ary, img_target_size)
 
             datetime_str = datetime.utcnow().strftime('%Y%m%d%H%M%S%f')
             seg_fname = SAVE_PATH_MASK + datetime_str
             ori_fname = SAVE_PATH_ORIGINAL + datetime_str
             # save the original and segamentation image
-            cv2.imwrite(seg_fname + '.jpg', seg_png_ary)
-            cv2.imwrite(ori_fname + '.jpg', ori_png_ary)
+            cv2.imwrite(seg_fname + '.jpg', seg_img_ary)
+            cv2.imwrite(ori_fname + '.jpg', ori_img_ary)
             
             # reset mask_color_cnt
             mask_color_cnt = 0
@@ -165,9 +167,9 @@ def main():
                     target_color = np.array(color_dict[mask_color_cnt+1])
                     target_color[0], target_color[2] = target_color[2], target_color[0]
                     # Get target color's infomation
-                    mask_area = np.all(seg_png_ary == target_color, axis=-1)
+                    mask_area = np.all(seg_img_ary == target_color, axis=-1)
                     # Set target color to white, others to block
-                    mask = np.zeros_like(seg_png_ary)
+                    mask = np.zeros_like(seg_img_ary)
                     mask[mask_area] = [255, 255, 255]
                     mask[~mask_area] = [0, 0, 0]
                     mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
@@ -185,21 +187,21 @@ def main():
 
                                 bounding_boxes.append((x, y, x+w, y+h))
                                 # Calculate the relative coordinates of the center of the bounding box (normalized coordinates)
-                                center_x = (x + w / 2) / seg_png_ary.shape[1]
-                                center_y = (y + h / 2) / seg_png_ary.shape[0]
-                                relative_width = w / seg_png_ary.shape[1]
-                                relative_height = h / seg_png_ary.shape[0]
+                                center_x = (x + w / 2) / seg_img_ary.shape[1]
+                                center_y = (y + h / 2) / seg_img_ary.shape[0]
+                                relative_width = w / seg_img_ary.shape[1]
+                                relative_height = h / seg_img_ary.shape[0]
 
                                 # write the info into the txt file
                                 file.write(f"{idx} {center_x} {center_y} {relative_width} {relative_height}\n")
                 for bbox in bounding_boxes:
                     x1, y1, x2, y2 = bbox
-                    cv2.rectangle(bbox_image, (x1, y1), (x2, y2), tuple(color_dict[mask_color_cnt+1]), 2)
-                    cv2.putText(bbox_image, object_name_list[idx], (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, tuple(color_dict[mask_color_cnt+1]), 2)
+                    cv2.rectangle(bbox_img_ary, (x1, y1), (x2, y2), tuple(color_dict[mask_color_cnt+1]), 2)
+                    cv2.putText(bbox_img_ary, object_name_list[idx], (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, tuple(color_dict[mask_color_cnt+1]), 2)
 
 
             bbox_fname = SAVE_PATH_BBOX + datetime_str
-            cv2.imwrite(bbox_fname + '.jpg', bbox_image)
+            cv2.imwrite(bbox_fname + '.jpg', bbox_img_ary)
 
         print(f'Generate success, {datetime_str} is saved to folders under detection.')
 
