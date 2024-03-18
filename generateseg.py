@@ -19,7 +19,7 @@ def getColorList():
     return color_dict
 
 def save_classes_list(path, object_name_list):
-    with open(path + "classes.txt", "a") as file:
+    with open(path + "classes.txt", "w") as file:
         for class_name in object_name_list:        
             file.write(f'{class_name}\n')
 
