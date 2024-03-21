@@ -21,7 +21,7 @@ def getColorList():
     return color_dict
 # save classes list to classes.txt
 def save_classes_list(path, object_name_list):
-    with open(path + "classes.txt", "w") as file:
+    with open(path + "classes.txt", "a") as file:
         for class_name in object_name_list:        
             file.write(f'{class_name}\n')
 
@@ -174,27 +174,29 @@ def main():
                     # get area in the mask                
                     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                     # Combine all white areas into a convex polygon
-                    if len(contours) > 0:                        
-                        all_contours = np.concatenate(contours)
-                        # Calculate the convex polygon of all white areas
-                        hull = cv2.convexHull(all_contours)
+                    if len(contours) <= 0:
                         mask_color_cnt += 1
-                        with open(SAVE_PATH_LABEL + datetime_str + ".txt", "a") as file:                    
-                            # Calculate area
-                            area = cv2.contourArea(hull)
-                            # If the area is too small, no action will be taken.
-                            if area > min_area:
-                                # Get boundary coordinates
-                                x, y, w, h = cv2.boundingRect(hull)
-                                bounding_boxes.append((x, y, x+w, y+h))
-                                # Calculate the relative coordinates of the center of the bounding box (normalized coordinates)
-                                center_x = (x + w / 2) / seg_png_ary.shape[1]
-                                center_y = (y + h / 2) / seg_png_ary.shape[0]
-                                relative_width = w / seg_png_ary.shape[1]
-                                relative_height = h / seg_png_ary.shape[0]
+                        continue
+                    all_contours = np.concatenate(contours)
+                    # Calculate the convex polygon of all white areas
+                    hull = cv2.convexHull(all_contours)
+                    mask_color_cnt += 1
+                    with open(SAVE_PATH_LABEL + datetime_str + ".txt", "a") as file:                    
+                        # Calculate area
+                        area = cv2.contourArea(hull)
+                        # If the area is too small, no action will be taken.
+                        if area > min_area:
+                            # Get boundary coordinates
+                            x, y, w, h = cv2.boundingRect(hull)
+                            bounding_boxes.append((x, y, x+w, y+h))
+                            # Calculate the relative coordinates of the center of the bounding box (normalized coordinates)
+                            center_x = (x + w / 2) / seg_png_ary.shape[1]
+                            center_y = (y + h / 2) / seg_png_ary.shape[0]
+                            relative_width = w / seg_png_ary.shape[1]
+                            relative_height = h / seg_png_ary.shape[0]
 
-                                # write the info into the txt file
-                                file.write(f"{idx} {center_x} {center_y} {relative_width} {relative_height}\n")
+                            # write the info into the txt file
+                            file.write(f"{idx} {center_x} {center_y} {relative_width} {relative_height}\n")
                 for bbox in bounding_boxes:
                     x1, y1, x2, y2 = bbox
                     cv2.rectangle(bbox_image, (x1, y1), (x2, y2), tuple(color_dict[mask_color_cnt+1]), 2)
