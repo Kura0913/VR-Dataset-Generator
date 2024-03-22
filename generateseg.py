@@ -19,7 +19,7 @@ def getColorList():
     return color_dict
 
 def save_classes_list(path, object_name_list):
-    with open(path + "classes.txt", "w") as file:
+    with open(path + "classes.txt", "a") as file:
         for class_name in object_name_list:        
             file.write(f'{class_name}\n')
 
@@ -64,7 +64,7 @@ def main():
     delay_time = config_setting['config']['delay']
     # controller
     get_log = False
-
+    
     # counter
     mask_color_cnt = 0
     seg_color_cnt = 0
@@ -119,10 +119,6 @@ def main():
                     seg_color_cnt += 1
             # save object's num to list
             objects_cnt_list.append(seg_color_cnt)
-        # if there are no objects
-        if all(num == 0 for num in objects_cnt_list):
-            time.sleep(0.5)
-            continue
 
         # get images response
         ori_response, seg_response,  = client.simGetImages(
@@ -135,16 +131,18 @@ def main():
         seg_raw_image = seg_response.image_data_uint8
 
         # trans to uint_8 array form
-        seg_img_ary = cv2.imdecode(airsim.string_to_uint8_array(ori_raw_image), cv2.IMREAD_COLOR)
+        bbox_img_ary = cv2.imdecode(airsim.string_to_uint8_array(ori_raw_image), cv2.IMREAD_COLOR)
         ori_img_ary = cv2.imdecode(airsim.string_to_uint8_array(ori_raw_image), cv2.IMREAD_COLOR)
         seg_img_ary = cv2.imdecode(airsim.string_to_uint8_array(seg_raw_image), cv2.IMREAD_COLOR)
         # check wheather get masks
         is_black = np.all(seg_img_ary == 0)
         if ~is_black:
             # resize the image
-            output_img_ary = cv2.resize(ori_img_ary, img_target_size)
+            seg_output_image = cv2.resize(ori_img_ary, img_target_size)
             ori_img_ary = cv2.resize(ori_img_ary, img_target_size)
             seg_img_ary = cv2.resize(seg_img_ary, img_target_size)
+
+
 
             datetime_str = datetime.utcnow().strftime('%Y%m%d%H%M%S%f')
             seg_fname = SAVE_PATH_MASK + datetime_str
@@ -195,11 +193,11 @@ def main():
 
                                 points = contour.astype(np.int32)
                                 for point in points:
-                                    cv2.circle(output_img_ary, tuple(point[0]), 1, (255, 0, 0), -1)
-                                cv2.polylines(output_img_ary, [points], isClosed=True, color=(255, 0, 0), thickness=1)
+                                    cv2.circle(seg_output_image, tuple(point[0]), 1, (255, 0, 0), -1)
+                                cv2.polylines(seg_output_image, [points], isClosed=True, color=(255, 0, 0), thickness=1)
 
             seg_fname = SAVE_PATH_SEGPHOTO + datetime_str
-            cv2.imwrite(seg_fname + '.jpg', output_img_ary)
+            cv2.imwrite(seg_fname + '.jpg', seg_output_image)
 
         print(f'Generate success, {datetime_str} is saved to folders under segmentation.')
 
