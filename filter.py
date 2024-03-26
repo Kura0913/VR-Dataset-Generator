@@ -27,20 +27,21 @@ def main():
             label_folder = config_setting['file_path']['segmentation']['label']
 
     # get file list
-    bbox_files = set(os.listdir(reference_folder))
-    seg_files = set(os.listdir(mask_folder))
-    original_files = set(os.listdir(original_folder))
-    label_files = set(os.listdir(label_folder))
+    bbox_files = set(os.path.splitext(filename)[0] for filename in os.listdir(reference_folder))
+    seg_files = set(os.path.splitext(filename)[0] for filename in os.listdir(mask_folder))
+    original_files = set(os.path.splitext(filename)[0] for filename in os.listdir(original_folder))
+    label_files = set(os.path.splitext(filename)[0] for filename in os.listdir(label_folder))
 
     # file files to delete
-    files_to_delete = (seg_files | original_files) - bbox_files
+    files_to_delete = (seg_files | original_files | label_files) - bbox_files
 
     # start delete
     for file in files_to_delete:
-        reference_path = os.path.join(reference_folder, file)
-        mask_path = os.path.join(mask_folder, file)
-        original_path = os.path.join(original_folder, file)
-        label_path = os.path.join(label_folder, os.path.splitext(file)[0] + ".txt")
+        reference_path = os.path.join(reference_folder, file + ".jpg")
+        mask_path = os.path.join(mask_folder, file + ".jpg")
+        original_path = os.path.join(original_folder, file + ".jpg")
+        if file != "classes":
+            label_path = os.path.join(label_folder, file + ".txt")
 
         # remove the file
         if os.path.exists(reference_path):
