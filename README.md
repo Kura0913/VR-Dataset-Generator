@@ -85,7 +85,7 @@ VR-Dataset-generator
 ```
 
 
-### config_Setting.json
+### config.json
 
 * mode:'detection' or 'segmentation'
 * image_size:Set output image size
