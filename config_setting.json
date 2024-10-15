@@ -18,7 +18,7 @@
     },
     "config":
     {
-        "mode":"detection",
+        "mode":"segmentation",
         "image_size":
         {
             "width":1920,

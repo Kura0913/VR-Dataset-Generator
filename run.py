@@ -1,23 +1,21 @@
 import os
 import json
+from DatasetGenerrator import DatasetGenerator
 
 def main():
-    cmd_line = 'python '
-
     with open("config_setting.json", encoding="utf-8") as json_file:
         config_setting = json.load(json_file)
 
-    print(config_setting['config']['mode'])
+    generator_class = DatasetGenerator()
 
     if config_setting['config']['mode']:
-        if config_setting['config']['mode'] == 'detection':
-            cmd_line += f'generatedet.py'
+        if config_setting['config']['mode'] == 'detection':            
             print(f'Current mode:detection. Try to start generating detection dataset...')
+            generator_class.detect_generator()
         elif config_setting['config']['mode'] == 'segmentation':
-            cmd_line += f'generateseg.py'
             print(f'Current mode:segmentation. Try to start generating segmentation dataset...')
-
-        os.system(cmd_line)
+            generator_class.segmentation_generator()
+    
 
 if __name__ == "__main__":
     main()
